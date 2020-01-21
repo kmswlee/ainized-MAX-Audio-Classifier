@@ -1,0 +1,131 @@
+openapi: 3.0.1
+info:
+  title: MAX Audio Classifier
+  description: Identify sounds in short audio clips
+  version: 1.2.0
+servers:
+- url: https://endpoint.ainize.ai/kmswlee/ainized-audio-classifier
+- url: http://35.243.110.222
+tags:
+- name: model
+  description: Model information and inference operations
+paths:
+  /model/metadata:
+    get:
+      tags:
+      - model
+      summary: Return the metadata associated with the model
+      operationId: get_model_metadata_api
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelMetadata'
+  /model/predict:
+    post:
+      tags:
+      - model
+      summary: Predict audio classes from input data
+      operationId: predict
+      parameters:
+      - name: start_time
+        in: query
+        description: The number of seconds into the audio file the prediction should
+          start at.
+        schema:
+          type: number
+          default: 0.0
+      - name: filter
+        in: query
+        description: List of labels to filter (optional)
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+              - audio
+              properties:
+                audio:
+                  type: string
+                  description: signed 16-bit PCM WAV audio file
+                  format: binary
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelPredictResponse'
+components:
+  schemas:
+    ModelMetadata:
+      required:
+      - description
+      - id
+      - name
+      - source
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          description: Model identifier
+        name:
+          type: string
+          description: Model name
+        description:
+          type: string
+          description: Model description
+        type:
+          type: string
+          description: Model type
+        source:
+          type: string
+          description: Model source
+        license:
+          type: string
+          description: Model license
+    ModelPredictResponse:
+      required:
+      - status
+      type: object
+      properties:
+        status:
+          type: string
+          description: Response status message
+        predictions:
+          type: array
+          description: Predicted audio classes and probabilities
+          items:
+            $ref: '#/components/schemas/LabelPrediction'
+    LabelPrediction:
+      required:
+      - label
+      - probability
+      type: object
+      properties:
+        label_id:
+          type: string
+          description: Label identifier
+        label:
+          type: string
+          description: Audio class label
+        probability:
+          type: number
+  responses:
+    MaskError:
+      description: When any error occurs on mask
+      content: {}
+    ParseError:
+      description: When a mask can't be parsed
+      content: {}

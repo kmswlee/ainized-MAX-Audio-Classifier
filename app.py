@@ -17,7 +17,11 @@ from maxfw.core import MAXApp
 from api import ModelMetadataAPI, ModelPredictAPI
 from config import API_TITLE, API_DESC, API_VERSION
 
-max_app = MAXApp(API_TITLE, API_DESC, API_VERSION)
+class MyMAXApp(MAXApp):
+    def run(self, host='0.0.0.0', *args, **kwargs):
+        self.app.run(host, *args, **kwargs)
+
+max_app = MyMAXApp(API_TITLE, API_DESC, API_VERSION)
 max_app.add_api(ModelMetadataAPI, '/metadata')
 max_app.add_api(ModelPredictAPI, '/predict')
-max_app.run()
+max_app.run(port=80)

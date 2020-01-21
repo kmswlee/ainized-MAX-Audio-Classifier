@@ -31,6 +31,8 @@ COPY . /workspace
 # check file integrity
 RUN md5sum -c md5sums.txt
 
-EXPOSE 5000
+EXPOSE 80
 
+ENV CORS_ENABLE true
+ENV WERKZEUG_RUN_MAIN true
 CMD python app.py
