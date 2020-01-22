@@ -1,8 +1,5 @@
 [![Run on Ainize](https://ainize.ai/static/images/run_on_ainize_button.svg)](https://ainize.web.app/redirect?git_repo=github.com/kmswlee/ainized-MAX-Audio-Classifier)
 
-[![Build Status](https://travis-ci.com/IBM/MAX-Audio-Classifier.svg?branch=master)](https://travis-ci.com/IBM/MAX-Audio-Classifier) [![Website Status](https://img.shields.io/website/http/max-audio-classifier.max.us-south.containers.appdomain.cloud/swagger.json.svg?label=api+demo)](http://max-audio-classifier.max.us-south.containers.appdomain.cloud/)
-
-[<img src="docs/deploy-max-to-ibm-cloud-with-kubernetes-button.png" width="400px">](http://ibm.biz/max-to-ibm-cloud-tutorial)
 
 # IBM Developer Model Asset Exchange: Audio Classifier
 
@@ -65,7 +62,7 @@ arXiv:1609.09430, 2016.
 To run the docker image, which automatically starts the model serving API, run:
 
 ```
-$ docker run -it -p 5000:5000 codait/max-audio-classifier
+$ docker run -it -p 80:80 codait/max-audio-classifier
 ```
 
 This will pull a pre-built image from Docker Hub (or use an existing image if already cached locally) and run it.
@@ -85,7 +82,7 @@ On your Kubernetes cluster, run the following commands:
 $ kubectl apply -f https://raw.githubusercontent.com/IBM/MAX-Audio-Classifier/master/max-audio-classifier.yaml
 ```
 
-The model will be available internally at port `5000`, but can also be accessed externally through the `NodePort`.
+The model will be available internally at port `80`, but can also be accessed externally through the `NodePort`.
 
 A more elaborate tutorial on how to deploy this MAX model to production on [IBM Cloud](https://ibm.biz/Bdz2XM) can be found [here](http://ibm.biz/max-to-ibm-cloud-tutorial)
 
@@ -126,12 +123,12 @@ only (we will add support for GPU images later).
 To run the Docker image, which automatically starts the model serving API, run:
 
 ```
-$ docker run -it -p 5000:5000 max-audio-classifier
+$ docker run -it -p 80:80 max-audio-classifier
 ```
 
 ### 3. Use the Model
 
-The API server automatically generates an interactive Swagger documentation page. Go to `http://localhost:5000` to load
+The API server automatically generates an interactive Swagger documentation page. Go to `http://localhost` to load
 it. From there you can explore the API and also create test requests.
 
 _Note_ : The input is a 10 second signed 16-bit PCM wav audio file. Files longer than 10 seconds will be clipped so that only the first 10 seconds will be used by the model. Conversely, files shorter than 10 seconds will be repeated to create a clip 10 seconds in length.
@@ -144,7 +141,7 @@ in the `samples` folder) and get predictions from the API.
 You can also test it on the command line, for example (with the `thunder.wav` file):
 
 ```
-$ curl -F "audio=@samples/thunder.wav;type=audio/wav" -XPOST http://localhost:5000/model/predict
+$ curl -F "audio=@samples/thunder.wav;type=audio/wav" -XPOST http://localhost/model/predict
 ```
 
 You should see a JSON response like that below:
