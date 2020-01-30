@@ -1,10 +1,10 @@
 openapi: 3.0.1
 info:
   title: MAX Audio Classifier
-  description: Identify sounds in short audio clips
+  description: Identify sounds in short audio clips. if you want to check classifier list, check samples/class_labels_indices.csv
   version: 1.2.0
 servers:
-- url: https://endpoint.ainize.ai/kmswlee/ainized-audio-classifier
+- url: http://ainized-audio-classifier.kmswlee.endpoint.dev.ainize.ai
 - url: http://35.243.110.222
 tags:
 - name: model
